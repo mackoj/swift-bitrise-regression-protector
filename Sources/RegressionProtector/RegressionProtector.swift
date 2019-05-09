@@ -97,6 +97,5 @@ public struct RegressionProtector {
             print("Impossible 🧐")
             return false
         }
-    }
-    
+    }    
 }
