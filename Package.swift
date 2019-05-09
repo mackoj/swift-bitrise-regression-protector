@@ -15,13 +15,12 @@ let package = Package(
     ],
     dependencies: [
 	    .package(url: "https://github.com/stephencelis/SQLite.swift.git", from: "0.12.0"),
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.5.0"),
-        .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.2.2"),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.5.0")
     ],
     targets: [
         .target(
           name: "cli-regression-protector",
-          dependencies: ["RegressionProtector", "SwiftCLI"]),
+          dependencies: ["RegressionProtector"]),
         .target(
           name: "RegressionProtector",
           dependencies: ["SQLite"]),

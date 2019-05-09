@@ -18,15 +18,6 @@
           "revision": "883f0b0623ae55f41f42e2399dab428017896448",
           "version": "1.5.0"
         }
-      },
-      {
-        "package": "SwiftCLI",
-        "repositoryURL": "https://github.com/jakeheis/SwiftCLI",
-        "state": {
-          "branch": null,
-          "revision": "5318c37d3cacc8780f50b87a8840a6774320ebdf",
-          "version": "5.2.2"
-        }
       }
     ]
   },

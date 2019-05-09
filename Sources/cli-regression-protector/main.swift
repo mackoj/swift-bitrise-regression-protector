@@ -1,5 +1,4 @@
 import Foundation
-import SwiftCLI
 import RegressionProtector
 
 extension Collection {
