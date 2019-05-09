@@ -1,5 +1,6 @@
 import Foundation
 import RegressionProtector
+import Commander
 
 let limitKey = "warning"
 let limitValue = 6
@@ -32,3 +33,4 @@ func main(limitKey : String, limitValue : Int, sign : RegressionProtector.Sign, 
 }
 
 main(limitKey: limitKey, limitValue: limitValue, sign: sign, dbPath: dbPath, dbFilePath: dbFilePath)
+
