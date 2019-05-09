@@ -1,14 +1,16 @@
 import Foundation
+import SwiftCLI
 import RegressionProtector
-import Commander
 
-let limitKey = "warning"
-let limitValue = 6
-let sign = RegressionProtector.Sign(rawValue: "<") ?? RegressionProtector.Sign.superiorTo
-let dbPath = "/Users/jeffreymacko/AppOps/tools/limiter/.ci"
-let dbFilePath = "/Users/jeffreymacko/AppOps/tools/limiter/.ci/ci.sqlite3"
+extension Collection {
+    
+    /// Returns the element at the specified index if it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
 
-func main(limitKey : String, limitValue : Int, sign : RegressionProtector.Sign, dbPath : String, dbFilePath : String) {
+func start(limitKey : String, limitValue : Int, sign : RegressionProtector.Sign, dbPath : String, dbFilePath : String) {
     do {
         if FileManager.default.fileExists(atPath: dbFilePath) == false {
             if try RegressionProtector.createDB(dbFilePath, folderPath: dbPath) == false {
@@ -32,5 +34,31 @@ func main(limitKey : String, limitValue : Int, sign : RegressionProtector.Sign, 
     exit(0)
 }
 
-main(limitKey: limitKey, limitValue: limitValue, sign: sign, dbPath: dbPath, dbFilePath: dbFilePath)
 
+let arguments = CommandLine.arguments.dropFirst()
+guard arguments.count == 4 else {
+    print("Bad Argument")
+    exit(1)
+}
+
+guard
+    let limitKey = arguments[safe: 1],
+    let stringValue = arguments[safe: 2],
+    let limitValue = Int(stringValue),
+    let signString = arguments[safe: 3],
+    let sign = RegressionProtector.Sign(rawValue: signString),
+    let dbFilePath = arguments[safe: 4],
+    let url = URL(string: dbFilePath)
+    else
+{
+    print("Bad Argument")
+    exit(1)
+}
+
+start(
+    limitKey: limitKey,
+    limitValue: limitValue,
+    sign: sign,
+    dbPath: url.deletingLastPathComponent().absoluteString,
+    dbFilePath: dbFilePath
+)
