@@ -7,6 +7,12 @@ public struct RegressionProtector {
     let limitKey = Expression<String>("limitKey")
     let limitValue = Expression<Int>("limitValue")
 
+    
+    public enum Sign : String, RawRepresentable {
+        case inferiorTo = "<"
+        case superiorTo = ">"
+    }
+    
     public init?(
         _ databasePath : String
         )  {
@@ -56,20 +62,27 @@ public struct RegressionProtector {
         try database.run(insert)
     }
     
+    public func updateLimit(
+        _ key : String,
+        _ value : Int
+        ) throws {
+        let update = limits.filter(limitKey == key).update(limitValue <- value)
+        try database.run(update)
+    }
+    
     public func shouldWeUpdateOrRejectValue(
         limitKey key : String,
         limitValue value : Int,
-        sign : String
+        sign : Sign
         ) throws -> Bool {
         
-        guard let numberOfFoundValue = try database.scalar("SELECT COUNT(*) FROM limits WHERE limitValue \(sign) \(value) AND limitKey = '\(key)'") as? Int64 else { return false }
+        guard let numberOfFoundValue = try database.scalar("SELECT COUNT(*) FROM limits WHERE limitValue \(sign.rawValue) \(value) AND limitKey = '\(key)'") as? Int64 else { return false }
         
         guard let numberOfEqualValue = try database.scalar("SELECT COUNT(*) FROM limits WHERE limitValue = \(value) AND limitKey = '\(key)'") as? Int64 else { return false }
         
         switch (numberOfFoundValue, numberOfEqualValue) {
         case (0, 0):
-            let update = limits.filter(limitKey == key).update(limitValue <- value)
-            try database.run(update)
+            try updateLimit(key, value)
             print("We have update the saved value to \(value).")
             return true
         case (0, 1):
@@ -78,7 +91,7 @@ public struct RegressionProtector {
         case (1, 0), (1, 1):
             let stmt = try database.scalar("SELECT limitValue FROM limits WHERE limitKey = '\(key)'") as? Int64
             let ustmt = stmt ?? 999999
-            print("The test \"\(value) \(sign) \(ustmt)\" failed")
+            print("The test \"\(value) \(sign.rawValue) \(ustmt)\" failed")
             return false
         default:
             print("Impossible 🧐")

@@ -3,11 +3,11 @@ import RegressionProtector
 
 let limitKey = "warning"
 let limitValue = 6
-let sign = "<"
+let sign = RegressionProtector.Sign(rawValue: "<") ?? RegressionProtector.Sign.superiorTo
 let dbPath = "/Users/jeffreymacko/AppOps/tools/limiter/.ci"
 let dbFilePath = "/Users/jeffreymacko/AppOps/tools/limiter/.ci/ci.sqlite3"
 
-func main(limitKey : String, limitValue : Int, sign : String, dbPath : String, dbFilePath : String) {
+func main(limitKey : String, limitValue : Int, sign : RegressionProtector.Sign, dbPath : String, dbFilePath : String) {
     do {
         if FileManager.default.fileExists(atPath: dbFilePath) == false {
             if try RegressionProtector.createDB(dbFilePath, folderPath: dbPath) == false {

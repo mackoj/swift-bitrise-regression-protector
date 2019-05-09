@@ -26,6 +26,6 @@ let package = Package(
           dependencies: ["SQLite"]),
         .testTarget(
           name: "RegressionProtectorTests",
-          dependencies: ["RegressionProtector", "SnapshotTesting"]),
+          dependencies: ["SnapshotTesting", "RegressionProtector"]),
     ]
 )
