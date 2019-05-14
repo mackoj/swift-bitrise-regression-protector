@@ -8,7 +8,7 @@ final class RegressionProtectorTests: XCTestCase {
     var rp : RegressionProtector?
     override func setUp() {
         do {
-            try RegressionProtector.createDB(dbFilePath, folderPath: dbPath)
+            _ = try RegressionProtector.createDB(dbFilePath, folderPath: dbPath)
         } catch {
             print(error)
         }
